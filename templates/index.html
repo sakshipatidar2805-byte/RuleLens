@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RuleLens - Attendance Decision System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .tagline {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 55px auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .hero p {
+            color: #64748b;
+            font-size: 17px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(15,23,42,0.08);
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6366f1;
+        }
+
+        .hint {
+            margin-top: 7px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #4f46e5;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .info {
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .info-box strong {
+            display: block;
+            font-size: 22px;
+            color: #4f46e5;
+            margin-bottom: 5px;
+        }
+
+        .info-box span {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 45px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">⚖ RuleLens</div>
+        <div class="tagline">Academic Rule Decision System</div>
+    </nav>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Attendance Eligibility Checker</h1>
+            <p>
+                Analyze your attendance against university academic regulations.
+            </p>
+        </section>
+
+        <section class="card">
+
+            <form method="POST" action="/analyze">
+
+                <div class="form-group">
+                    <label for="attendance">
+                        Attendance Percentage
+                    </label>
+
+                    <input
+                        type="number"
+                        id="attendance"
+                        name="attendance"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="e.g. 72.5"
+                        required
+                    >
+
+                    <div class="hint">
+                        Enter a value between 0% and 100%.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="medical">
+                        Medical Circumstance
+                    </label>
+
+                    <select id="medical" name="medical">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="medical_approved">
+                        Medical Documentation Approved
+                    </label>
+
+                    <select id="medical_approved" name="medical_approved">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+
+                    <div class="hint">
+                        Required for medical concession consideration.
+                    </div>
+                </div>
+
+                <button type="submit">
+                    Analyze Eligibility
+                </button>
+
+            </form>
+
+            <div class="info">
+                <div class="info-box">
+                    <strong>75%</strong>
+                    <span>Normal Requirement</span>
+                </div>
+
+                <div class="info-box">
+                    <strong>65%</strong>
+                    <span>Medical Concession</span>
+                </div>
+
+                <div class="info-box">
+                    <strong>10</strong>
+                    <span>Rules in Corpus</span>
+                </div>
+            </div>
+
+        </section>
+
+        <footer>
+            RuleLens • Explainable Academic Rule Analysis
+        </footer>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RuleLens - Decision Result</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+        .navbar {
+            background: white;
+            padding: 18px 8%;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 55px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(15,23,42,0.08);
+        }
+
+        .status {
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            background: #f1f5f9;
+            margin-bottom: 30px;
+        }
+
+        .status-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .status h2 {
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .status p {
+            color: #64748b;
+        }
+
+        .section {
+            margin-top: 28px;
+        }
+
+        .section h3 {
+            font-size: 19px;
+            margin-bottom: 12px;
+        }
+
+        .explanation {
+            background: #f8fafc;
+            border-left: 4px solid #4f46e5;
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .rule {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .rule strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .score {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .warning {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .error {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 18px;
+            border-radius: 8px;
+            color: #991b1b;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            background: #4f46e5;
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: #4338ca;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">⚖ RuleLens</div>
+    </nav>
+
+    <main class="container">
+
+        <div class="header">
+            <h1>Decision Result</h1>
+            <p>Explainable academic rule analysis</p>
+        </div>
+
+        <div class="result-card">
+
+            {% if error %}
+
+                <div class="error">
+                    <strong>Something went wrong</strong>
+                    <br>
+                    {{ error }}
+                </div>
+
+            {% else %}
+
+                <div class="status">
+
+                    {% if decision.eligible %}
+                        <div class="status-icon">✅</div>
+                    {% else %}
+                        <div class="status-icon">❌</div>
+                    {% endif %}
+
+                    <h2>{{ decision.status }}</h2>
+
+                    <p>
+                        Examination eligibility has been evaluated
+                        according to the available academic rules.
+                    </p>
+
+                </div>
+
+                <div class="section">
+
+                    <h3>Explanation</h3>
+
+                    <div class="explanation">
+                        {{ decision.explanation }}
+                    </div>
+
+                </div>
+
+                {% if decision.warnings %}
+
+                <div class="section">
+
+                    <h3>⚠ Warnings</h3>
+
+                    {% for warning in decision.warnings %}
+                        <div class="warning">
+                            {{ warning }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+                <div class="section">
+
+                    <h3>📚 Supporting Rules</h3>
+
+                    {% if decision.supporting_rules %}
+
+                        {% for item in decision.supporting_rules %}
+
+                            <div class="rule">
+
+                                <strong>
+                                    {{ item.rule.section }}:
+                                    {{ item.rule.title }}
+                                </strong>
+
+                                <div class="score">
+                                    Relevance score:
+                                    {{ "%.2f"|format(item.score) }}
+                                </div>
+
+                                <p style="margin-top: 8px; line-height: 1.5;">
+                                    {{ item.rule.text }}
+                                </p>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="rule">
+                            No supporting rules were found.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+            <a href="/" class="button">
+                ← Check Another Case
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
